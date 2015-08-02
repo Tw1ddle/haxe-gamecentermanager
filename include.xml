@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<ndll name="gamecentermanager" if="ios" />
+
+	<section if="ios">
+	</section>
+</project>

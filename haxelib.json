@@ -1,0 +1,11 @@
+{
+	"name": "gamecentermanager",
+	"url": "http://samcodes.co.uk/code/",
+	"license": "MIT",
+	"tags": ["openfl","game","ios","osx","api","extension"],
+	"description": "iOS and OSX Game Center support",
+	"version": "1.0.0",
+	"releasenote": "Initial release",
+	"contributors": ["samcodes"],
+	"dependencies": {}
+}
