@@ -7,14 +7,6 @@ import flash.Lib;
 	var LowToHigh = 1;
 }
 
-@:enum abstract GameCenterManagerErrorCode(Int) {
-	var Unknown = 1;
-	var NotAvailable = 2;
-	var FeatureNotAvailable = 3;
-	var InternetNotAvailable = 4;
-	var AchievementDataMissing = 5;
-}
-
 class GameCenterManager {
 	public static var localPlayerId(get,null):String;
 	public static var localPlayerDisplayName(get,null):String;
@@ -22,7 +14,9 @@ class GameCenterManager {
 	public static var shouldCryptData(get,null):Bool;
 	public static var cryptKey(get,null):String;
 	
-	private static inline var libName:String = "gamecentermanager";
+	public static function setListener(listener:GameCenterManagerListener):Void {
+		set_listener(listener.notify);
+	}
 	
 	public static function setupManager():Void {
 		setup_manager();
@@ -60,16 +54,8 @@ class GameCenterManager {
 		return high_score_for_leaderboard(identifier);
 	}
 	
-	public static function highScoreForLeaderboards(identifiers:Array<String>):Map<String, Int> {
-		return high_score_for_leaderboards(identifiers);
-	}
-	
 	public static function progressForAchievement(identifier:String):Float {
 		return progress_for_achievement(identifier);
-	}
-	
-	public static function progressForAchievements(identifiers:Array<String>):Map<String, Float> {
-		return progress_for_achievements(identifiers);
 	}
 	
 	public static function requestChallenges():Void {
@@ -122,9 +108,9 @@ class GameCenterManager {
 		return crypt_key();
 	}
 	
-	// UNIMPLEMENTED
-	//public static function localPlayerPhoto(block?):Void {
-	//}
+	private static inline var libName:String = "gamecentermanager";
+	
+	private static var set_listener = Lib.load(libName, "set_listener", 1);
 	
 	private static var setup_manager = Lib.load(libName, "setup_manager", 0);
 	private static var setup_manager_and_set_should_crypt_with_key = Lib.load(libName, "setup_manager_and_set_should_crypt_with_key", 1);
@@ -135,9 +121,8 @@ class GameCenterManager {
 	private static var save_score_to_report_later = Lib.load(libName, "save_score_to_report_later", 3);
 	private static var save_achievement_to_report_later = Lib.load(libName, "save_achievement_to_report_later", 2);
 	private static var high_score_for_leaderboard = Lib.load(libName, "high_score_for_leaderboard", 1);
-	private static var high_score_for_leaderboards = Lib.load(libName, "high_score_for_leaderboards", 1);
+	
 	private static var progress_for_achievement = Lib.load(libName, "progress_for_achievement", 1);
-	private static var progress_for_achievements = Lib.load(libName, "progress_for_achievements", 1);
 	private static var request_challenges = Lib.load(libName, "request_challenges", 0);
 	
 	#if ios
@@ -154,4 +139,16 @@ class GameCenterManager {
 	private static var local_player_data = Lib.load(libName, "local_player_data", 0);
 	private static var should_crypt_data = Lib.load(libName, "should_crypt_data", 0);
 	private static var crypt_key = Lib.load(libName, "crypt_key", 0);
+	
+	// UNIMPLEMENTED
+	//public static function progressForAchievements(identifiers:Array<String>):Map<String, Float> {
+	//	return progress_for_achievements(identifiers);
+	//}
+	//public static function highScoreForLeaderboards(identifiers:Array<String>):Map<String, Int> {
+	//	return high_score_for_leaderboards(identifiers);
+	//}
+	//public static function localPlayerPhoto():Void {
+	//}
+	//private static var progress_for_achievements = Lib.load(libName, "progress_for_achievements", 1);
+	//private static var high_score_for_leaderboards = Lib.load(libName, "high_score_for_leaderboards", 1);
 }
