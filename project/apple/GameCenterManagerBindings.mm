@@ -12,7 +12,7 @@
 // TODO put these parameters into a struct or have multiple events?
 extern "C" void sendGameCenterManagerEvent(
 const char* type,
-int availabilityState,
+const char* availabilityState,
 int error,
 const char* identifier,
 int value,
@@ -22,7 +22,7 @@ bool showsCompletionBanner);
  
 void queueGameCenterManagerEvent(
 const char* type = "NONE",
-int availabilityState = 0,
+const char* availabilityState = "UNKNOWN",
 int error = 0,
 const char* identifier = "",
 int value = 0,
@@ -30,7 +30,8 @@ int rank = 0,
 float percentComplete = 0.0f,
 bool showsCompletionBanner = false)
 {
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+	[[NSOperationQueue mainQueue] addOperationWithBlock:^ 
+	{
 		sendGameCenterManagerEvent(type, availabilityState, error, identifier, value, rank, percentComplete, showsCompletionBanner);
 	}];
 }
@@ -41,34 +42,93 @@ bool showsCompletionBanner = false)
 @implementation MyGameCenterManagerDelegate
 
 // TODO implement mac equivalent of uiviewcontroller stuff
-- (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController {
-    // TODO
+- (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
+{
     queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager availabilityChanged:(NSDictionary *)availabilityInformation {
-	// TODO pass delegate parameters through
-    queueGameCenterManagerEvent("onAvailabilityChanged");
+- (void)gameCenterManager:(GameCenterManager *)manager availabilityChanged:(NSDictionary *)availabilityInformation
+{
+	const char* status = "UNKNOWN";
+	
+	if ([[availabilityInformation objectForKey:@"status"] isEqualToString:@"GameCenter Available"]) 
+	{
+		status = "AVAILABLE";
+    } else {
+		status = "UNAVAILABLE";
+    }
+	
+    queueGameCenterManagerEvent("onAvailabilityChanged", status);
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager error:(NSError *)error {
-    queueGameCenterManagerEvent("onError");
+- (void)gameCenterManager:(GameCenterManager *)manager error:(NSError *)error
+{
+	int errorCode = 0;
+	
+	if(error != nil)
+	{
+		errorCode = error.code;
+	}
+	
+    queueGameCenterManagerEvent("onError", "", errorCode);
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager reportedAchievement:(GKAchievement *)achievement withError:(NSError *)error {
-	queueGameCenterManagerEvent("didReportAchievement");
+- (void)gameCenterManager:(GameCenterManager *)manager reportedAchievement:(GKAchievement *)achievement withError:(NSError *)error
+{
+	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
+	float percentComplete = reportedAchievement.percentComplete;
+	bool showsCompletionBanner = reportedAchievement.showsCompletionBanner;
+	
+	int errorCode = 0;
+	if(error != nil)
+	{
+		errorCode = error.code;
+	}
+	
+	queueGameCenterManagerEvent("didReportAchievement", "", errorCode, identifier, 0, 0, percentComplete, showsCompletionBanner);
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager reportedScore:(GKScore *)score withError:(NSError *)error {
-	queueGameCenterManagerEvent("didReportScore");
+- (void)gameCenterManager:(GameCenterManager *)manager reportedScore:(GKScore *)score withError:(NSError *)error 
+{
+	const char* identifier = [score.leaderboardIdentifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
+	int value = score.value;
+	int rank = score.rank;
+	int errorCode = 0;
+	if(error != nil)
+	{
+		errorCode = error.code;
+	}
+	
+	queueGameCenterManagerEvent("didReportScore", "", error, identifier, value, rank);
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager didSaveScore:(GKScore *)score {
-	queueGameCenterManagerEvent("didSaveScore");
+- (void)gameCenterManager:(GameCenterManager *)manager didSaveScore:(GKScore *)score
+{
+	const char* identifier = [score.leaderboardIdentifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
+	int value = score.value;
+	int rank = score.rank;
+	int errorCode = 0;
+	if(error != nil)
+	{
+		errorCode = error.code;
+	}
+	
+	queueGameCenterManagerEvent("didSaveScore", "", error, identifier, value, rank);
 }
 
-- (void)gameCenterManager:(GameCenterManager *)manager didSaveAchievement:(GKAchievement *)achievement {
-	queueGameCenterManagerEvent("didSaveAchievement");
+- (void)gameCenterManager:(GameCenterManager *)manager didSaveAchievement:(GKAchievement *)achievement
+{
+	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
+	float percentComplete = reportedAchievement.percentComplete;
+	bool showsCompletionBanner = reportedAchievement.showsCompletionBanner;
+	
+	int errorCode = 0;
+	if(error != nil)
+	{
+		errorCode = error.code;
+	}
+	
+	queueGameCenterManagerEvent("didSaveAchievement", "", errorCode, identifier, 0, 0, percentComplete, showsCompletionBanner);
 }
 
 @end

@@ -63,12 +63,12 @@ static value report_saved_scores_and_achievements()
 }
 DEFINE_PRIM(report_saved_scores_and_achievements, 0);
 
-static value save_score_to_report_later(value leaderboardId, value score, value sortOrder)
+static value save_score_to_report_later(value leaderboardId, value score)
 {
-	saveScoreToReportLater(val_string(leaderboardId), val_int(score), val_int(sortOrder));
+	saveScoreToReportLater(val_string(leaderboardId), val_int(score));
 	return alloc_null();
 }
-DEFINE_PRIM(save_score_to_report_later, 3);
+DEFINE_PRIM(save_score_to_report_later, 2);
 
 static value save_achievement_to_report_later(value identifier, value percentComplete)
 {
@@ -172,7 +172,7 @@ extern "C" int gamecentermanager_register_prims()
 }
 
 // TODO use struct instead of all these parameters, or multiple events
-extern "C" void sendGameCenterManagerEvent(const char* type, int availabilityState, int error, const char* identifier, int value, int rank, float percentComplete, bool showsCompletionBanner)
+extern "C" void sendGameCenterManagerEvent(const char* type, const char* availabilityState, int error, const char* identifier, int value, int rank, float percentComplete, bool showsCompletionBanner)
 {
     if(gameCenterManagerEventHandle == 0)
     {

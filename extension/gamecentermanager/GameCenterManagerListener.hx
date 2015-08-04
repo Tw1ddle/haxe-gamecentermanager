@@ -1,10 +1,17 @@
 package extension.GameCenterManager;
 
+@:enum abstract AvailabilityState(String) {
+	var UNKNOWN = "UNKNOWN";
+	var AVAILABLE = "AVAILABLE";
+	var UNAVAILABLE = "UNAVAILABLE";
+}
+
 class GameCenterManagerListener {
 	public function shouldAuthenticateUser():Void {
 	}
 	
-	public function onAvailabilityChanged(availabilityState:String):Void { // TODO
+	public function onAvailabilityChanged(availabilityState:String):Void {
+		
 	}
 	
 	public function onError(error:String):Void {

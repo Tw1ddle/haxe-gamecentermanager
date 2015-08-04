@@ -41,7 +41,7 @@ class GameCenterManager {
 		report_saved_scores_and_achievements();
 	}
 	
-	public static function saveScoreToReportLater(leaderboardId:String, score:Int, sortOrder:GameCenterSortOrder):Void {
+	public static function saveScoreToReportLater(leaderboardId:String, score:Int):Void {
 		save_score_to_report_later(leaderboardId, score, sortOrder);
 	}
 	
@@ -61,7 +61,6 @@ class GameCenterManager {
 		request_challenges();
 	}
 	
-	#if ios
 	public static function presentAchievements():Void {
 		present_achievements();
 	}
@@ -73,7 +72,6 @@ class GameCenterManager {
 	public static function presentChallenges():Void {
 		present_challenges();
 	}
-	#end
 	
 	public static function resetAchievements():Void {
 		reset_achievements();
@@ -113,18 +111,16 @@ class GameCenterManager {
 	private static var save_and_report_score = Lib.load(libName, "save_and_report_score", 3);
 	private static var save_and_report_achievement = Lib.load(libName, "save_and_report_achievement", 3);
 	private static var report_saved_scores_and_achievements = Lib.load(libName, "report_saved_scores_and_achievements", 0);
-	private static var save_score_to_report_later = Lib.load(libName, "save_score_to_report_later", 3);
+	private static var save_score_to_report_later = Lib.load(libName, "save_score_to_report_later", 2);
 	private static var save_achievement_to_report_later = Lib.load(libName, "save_achievement_to_report_later", 2);
 	private static var high_score_for_leaderboard = Lib.load(libName, "high_score_for_leaderboard", 1);
 	
 	private static var progress_for_achievement = Lib.load(libName, "progress_for_achievement", 1);
 	private static var request_challenges = Lib.load(libName, "request_challenges", 0);
 	
-	#if ios
 	private static var present_achievements = Lib.load(libName, "present_achievements", 0);
 	private static var present_leaderboards = Lib.load(libName, "present_leaderboards", 0);
 	private static var present_challenges = Lib.load(libName, "present_challenges", 0);
-	#end
 	
 	private static var reset_achievements = Lib.load(libName, "reset_achievements", 0);
 	private static var is_internet_available = Lib.load(libName, "is_internet_available", 0);

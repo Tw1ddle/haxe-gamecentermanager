@@ -9,18 +9,14 @@ namespace gamecentermanager
 	void saveAndReportScore(const char* leaderboardId, int score, int sortOrder);
 	void saveAndReportAchievement(const char* identifier, float percentComplete, bool shouldDisplayNotification);
 	void reportSavedScoresAndAchievements();
-	void saveScoreToReportLater(const char* leaderboardId, int score, int sortOrder);
+	void saveScoreToReportLater(const char* leaderboardId, int score);
 	void saveAchievementToReportLater(const char* identifier, float percentComplete);
 	int highScoreForLeaderboard(const char* identifier);
 	float progressForAchievement(const char* identifier);
 	void requestChallenges();
-    
-#ifdef IPHONE
 	void presentAchievements();
 	void presentLeaderboards();
 	void presentChallenges();
-#endif
-    
 	void resetAchievements();
 	bool isInternetAvailable();
 	bool isGameCenterAvailable();
