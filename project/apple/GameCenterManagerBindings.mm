@@ -71,11 +71,14 @@ bool showsCompletionBanner = false)
 #ifdef IPHONE
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
 {
-    queueGameCenterManagerEvent("shouldAuthenticateUser");
+    [self presentViewController:gameCenterLoginController animated:YES completion:^{
+        queueGameCenterManagerEvent("shouldAuthenticateUser");
+    }];	
 }
 #elif defined HX_MACOS
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(NSViewController *)gameCenterLoginController
 {
+	[self presentViewControllerAsModalWindow:gameCenterLoginController];
     queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
 #endif
@@ -172,6 +175,21 @@ namespace gamecentermanager
 		
 		MyGameCenterManagerDelegate *delegate = [MyGameCenterManagerDelegate new];
 		[[GameCenterManager sharedManager] setDelegate:delegate];
+	}
+	
+	void authenticateUser()
+	{
+		#ifdef IPHONE
+		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+		[[GameCenterManager sharedManager] authenticateUser:glView];
+		#elif defined HX_MACOS
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil || mainWindow.windowController == nil)
+        {
+            return;
+        }
+		[[GameCenterManager sharedManager] authenticateUser:mainWindow.windowController];
+		#endif
 	}
 	
 	void syncGameCenter()

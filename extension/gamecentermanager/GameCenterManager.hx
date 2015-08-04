@@ -25,6 +25,10 @@ class GameCenterManager {
 		setup_manager_with_crypt_key(cryptKey);
 	}
 	
+	public static function authenticateUser():Void {
+		authenticate_user();
+	}
+	
 	public static function syncGameCenter():Void {
 		sync_game_center();
 	}
@@ -107,6 +111,7 @@ class GameCenterManager {
 	
 	private static var setup_manager = Lib.load(libName, "setup_manager", 0);
 	private static var setup_manager_and_set_should_crypt_with_key = Lib.load(libName, "setup_manager_and_set_should_crypt_with_key", 1);
+	private static var authenticate_user = Lib.load(libName, "authenticate_user", 0);
 	private static var sync_game_center = Lib.load(libName, "sync_game_center, 0);
 	private static var save_and_report_score = Lib.load(libName, "save_and_report_score", 3);
 	private static var save_and_report_achievement = Lib.load(libName, "save_and_report_achievement", 3);

@@ -5,6 +5,7 @@ namespace gamecentermanager
 {
 	void setupManager();
 	void setupManagerAndSetShouldCryptWithKey(const char* cryptKey);
+	void authenticateUser();
 	void syncGameCenter();
 	void saveAndReportScore(const char* leaderboardId, int score, int sortOrder);
 	void saveAndReportAchievement(const char* identifier, float percentComplete, bool shouldDisplayNotification);

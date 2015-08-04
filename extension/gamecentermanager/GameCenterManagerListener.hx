@@ -11,7 +11,6 @@ class GameCenterManagerListener {
 	}
 	
 	public function onAvailabilityChanged(availabilityState:String):Void {
-		
 	}
 	
 	public function onError(error:String):Void {
@@ -36,8 +35,7 @@ class GameCenterManagerListener {
 	}
 
 	// Note Mac only, and only when achievements/leaderboards views finish, not challenges
-	public function onGameCenterViewControllerFinished()
-	{
+	public function onGameCenterViewControllerFinished() {
 	}
 	
 	private static inline var SHOULD_AUTHENTICATE_USER:String = "shouldAuthenticateUser";

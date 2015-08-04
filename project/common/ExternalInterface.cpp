@@ -35,6 +35,13 @@ static value setup_manager_and_set_should_crypt_with_key(value key)
 }
 DEFINE_PRIM(setup_manager_and_set_should_crypt_with_key, 1);
 
+static value authenticate_user()
+{
+	authenticateUser();
+	return alloc_null();
+}
+DEFINE_PRIM(authenticate_user, 0);
+
 static value sync_game_center()
 {
 	syncGameCenter();
