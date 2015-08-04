@@ -21,7 +21,7 @@ float percentComplete,
 bool showsCompletionBanner);
  
 void queueGameCenterManagerEvent(
-const char* type = "NONE",
+const char* type,
 const char* availabilityState = "UNKNOWN",
 int error = 0,
 const char* identifier = "",
@@ -41,7 +41,6 @@ bool showsCompletionBanner = false)
 
 @implementation MyGameCenterManagerDelegate
 
-// TODO implement mac equivalent of uiviewcontroller stuff
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
 {
     queueGameCenterManagerEvent("shouldAuthenticateUser");
@@ -76,8 +75,8 @@ bool showsCompletionBanner = false)
 - (void)gameCenterManager:(GameCenterManager *)manager reportedAchievement:(GKAchievement *)achievement withError:(NSError *)error
 {
 	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
-	float percentComplete = reportedAchievement.percentComplete;
-	bool showsCompletionBanner = reportedAchievement.showsCompletionBanner;
+	float percentComplete = achievement.percentComplete;
+	bool showsCompletionBanner = achievement.showsCompletionBanner;
 	
 	int errorCode = 0;
 	if(error != nil)
@@ -99,7 +98,7 @@ bool showsCompletionBanner = false)
 		errorCode = error.code;
 	}
 	
-	queueGameCenterManagerEvent("didReportScore", "", error, identifier, value, rank);
+	queueGameCenterManagerEvent("didReportScore", "", errorCode, identifier, value, rank, 0.0f, false);
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveScore:(GKScore *)score
@@ -107,28 +106,17 @@ bool showsCompletionBanner = false)
 	const char* identifier = [score.leaderboardIdentifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	int value = score.value;
 	int rank = score.rank;
-	int errorCode = 0;
-	if(error != nil)
-	{
-		errorCode = error.code;
-	}
 	
-	queueGameCenterManagerEvent("didSaveScore", "", error, identifier, value, rank);
+	queueGameCenterManagerEvent("didSaveScore", "", 0, identifier, value, rank, 0.0f, false);
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveAchievement:(GKAchievement *)achievement
 {
 	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
-	float percentComplete = reportedAchievement.percentComplete;
-	bool showsCompletionBanner = reportedAchievement.showsCompletionBanner;
+	float percentComplete = achievement.percentComplete;
+	bool showsCompletionBanner = achievement.showsCompletionBanner;
 	
-	int errorCode = 0;
-	if(error != nil)
-	{
-		errorCode = error.code;
-	}
-	
-	queueGameCenterManagerEvent("didSaveAchievement", "", errorCode, identifier, 0, 0, percentComplete, showsCompletionBanner);
+	queueGameCenterManagerEvent("didSaveAchievement", "", 0, identifier, 0, 0, percentComplete, showsCompletionBanner);
 }
 
 @end
