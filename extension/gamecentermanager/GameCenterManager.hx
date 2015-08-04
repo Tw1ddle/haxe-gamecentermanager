@@ -10,7 +10,6 @@ import flash.Lib;
 class GameCenterManager {
 	public static var localPlayerId(get,null):String;
 	public static var localPlayerDisplayName(get,null):String;
-	public static var localPlayerData(get,null):GameKitPlayerData; // TODO
 	public static var shouldCryptData(get,null):Bool;
 	public static var cryptKey(get,null):String;
 	
@@ -96,10 +95,6 @@ class GameCenterManager {
 		return local_player_display_name();
 	}
 	
-	private static function get_localPlayerData():GameKitPlayerData { // TODO implement GKPlayerData type
-		return local_player_data();
-	}
-	
 	private static function get_shouldCryptData():Bool {
 		return should_crypt_data();
 	}
@@ -136,11 +131,14 @@ class GameCenterManager {
 	private static var is_game_center_available = Lib.load(libName, "is_game_center_available", 0);
 	private static var local_player_id = Lib.load(libName, "local_player_id", 0);
 	private static var local_player_display_name = Lib.load(libName, "local_player_display_name", 0);
-	private static var local_player_data = Lib.load(libName, "local_player_data", 0);
 	private static var should_crypt_data = Lib.load(libName, "should_crypt_data", 0);
 	private static var crypt_key = Lib.load(libName, "crypt_key", 0);
 	
 	// UNIMPLEMENTED
+	//public static var localPlayerData(get,null):GameKitPlayerData;
+	//	private static function get_localPlayerData():GameKitPlayerData {
+	//	return local_player_data();
+	//}
 	//public static function progressForAchievements(identifiers:Array<String>):Map<String, Float> {
 	//	return progress_for_achievements(identifiers);
 	//}
@@ -151,4 +149,5 @@ class GameCenterManager {
 	//}
 	//private static var progress_for_achievements = Lib.load(libName, "progress_for_achievements", 1);
 	//private static var high_score_for_leaderboards = Lib.load(libName, "high_score_for_leaderboards", 1);
+	//private static var local_player_data = Lib.load(libName, "local_player_data", 0);
 }

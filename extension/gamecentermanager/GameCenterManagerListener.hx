@@ -1,13 +1,5 @@
 package extension.GameCenterManager;
 
-@:enum abstract GameCenterManagerErrorCode(Int) {
-	var Unknown = 1;
-	var NotAvailable = 2;
-	var FeatureNotAvailable = 3;
-	var InternetNotAvailable = 4;
-	var AchievementDataMissing = 5;
-}
-
 class GameCenterManagerListener {
 	public function shouldAuthenticateUser():Void {
 	}
@@ -44,7 +36,7 @@ class GameCenterManagerListener {
 	private static inline var DID_SAVE_ACHIEVEMENT:String = "didSaveAchievement";
 	private static inline var DID_SAVE_SCORE:String = "didSaveScore";
 	private static inline var ON_ACHIEVEMENTS_RESET:String = "onAchievementsReset";
-	private static inline var ON_CHALLENGES_REQUEST_COMPLETION = "onChallengesRequestCompletion";
+	private static inline var ON_CHALLENGES_REQUEST_COMPLETE:String = "onChallengesRequestComplete";
 	
 	public function notify(inEvent:Dynamic):Void {
 		var type:String = null;
@@ -84,8 +76,9 @@ class GameCenterManagerListener {
 				didSaveScore(identifier, rank, value);
 			case ON_ACHIEVEMENTS_RESET:
 				onAchievementsReset();
-			case ON_CHALLENGES_REQUEST_COMPLETION:
+			case ON_CHALLENGES_REQUEST_COMPLETE:
 				// TODO
+				//var challenges:Array<
 		}
 	}
 }

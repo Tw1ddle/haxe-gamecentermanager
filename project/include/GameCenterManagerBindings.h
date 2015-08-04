@@ -1,5 +1,5 @@
-
-// TODO possibly need to rename file
+#ifndef GAMECENTERMANAGERBINDINGS_H
+#define GAMECENTERMANAGERBINDINGS_H
 
 namespace gamecentermanager
 {
@@ -25,8 +25,10 @@ namespace gamecentermanager
 	bool shouldCryptData();
 	const char* cryptKey();
 	
-	// Unimplemented
+	// UNIMPLEMENTED
 	//highScoreForLeaderboards(identifiers:Array<String>):Map<String, Int>
 	//progressForAchievements(identifiers:Array<String>):Map<String, Float>
 	//localPlayerData():GameKitPlayerData
 }
+
+#endif

@@ -173,19 +173,24 @@ extern "C" int gamecentermanager_register_prims()
 	return 0;
 }
 
-// TODO
-extern "C" void sendGameCenterManagerEvent(const char* type, //etc
+// TODO use struct instead of all these parameters, or multiple events
+extern "C" void sendGameCenterManagerEvent(const char* type, int availabilityState, int error, const char* identifier, int value, int rank, float percentComplete, bool showsCompletionBanner)
 {
 	value o = alloc_empty_object();
 	alloc_field(o, val_id("type"), alloc_string(type));
 	
-	// TODO
+	alloc_field(o, val_id("availabilityState"), alloc_int(availabilityState));
+	alloc_field(o, val_id("error"), alloc_int(error));
+	alloc_field(o, val_id("identifier"), alloc_string(identifier));
+	alloc_field(o, val_id("value"), alloc_int(value));
+	alloc_field(o, val_id("rank"), alloc_int(rank));
+	alloc_field(o, val_id("percentComplete"), alloc_float(percentComplete));
+	alloc_field(o, val_id("showsCompletionBanner"), alloc_bool(showsCompletionBanner));
 	
 	val_call1(gameCenterManagerEventHandle->get(), o);
 }
 
 // UNIMPLEMENTED
-
 //static value local_player_data()
 //{
 //}
