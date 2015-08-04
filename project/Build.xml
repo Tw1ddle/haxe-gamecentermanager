@@ -30,6 +30,13 @@
         <files id="common"/>
         <files id="iphone" if="iphone"/>
         <files id="mac" if="mac"/>
+        
+        <section if="mac">
+            <vflag name="-framework" value="SystemConfiguration"/>
+            <vflag name="-framework" value="Security"/>
+            <vflag name="-framework" value="CFNetwork"/>
+            <vflag name="-framework" value="GameKit"/>
+        </section>
     </target>
     
     <target id="default">
