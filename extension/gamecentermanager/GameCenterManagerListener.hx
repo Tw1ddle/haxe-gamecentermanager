@@ -34,6 +34,11 @@ class GameCenterManagerListener {
 	
 	public function onChallengesRequestComplete(challenges:Array<Challenge>, error:String):Void { // TODO
 	}
+
+	// Note Mac only, and only when achievements/leaderboards views finish, not challenges
+	public function onGameCenterViewControllerFinished()
+	{
+	}
 	
 	private static inline var SHOULD_AUTHENTICATE_USER:String = "shouldAuthenticateUser";
 	private static inline var ON_AVAILABILITY_CHANGED:String = "onAvailabilityChanged";
@@ -44,6 +49,7 @@ class GameCenterManagerListener {
 	private static inline var DID_SAVE_SCORE:String = "didSaveScore";
 	private static inline var ON_ACHIEVEMENTS_RESET:String = "onAchievementsReset";
 	private static inline var ON_CHALLENGES_REQUEST_COMPLETE:String = "onChallengesRequestComplete";
+	private static inline var ON_GAME_CENTER_VIEW_CONTROLLER_FINISHED:String = “onGameCenterViewControllerFinished”;
 	
 	public function notify(inEvent:Dynamic):Void {
 		var type:String = null;
@@ -86,6 +92,8 @@ class GameCenterManagerListener {
 			case ON_CHALLENGES_REQUEST_COMPLETE:
 				// TODO
 				//var challenges:Array<
+			case ON_GAME_CENTER_VIEW_CONTROLLER_FINISHED:
+				onGameCenterViewControllerFinished();
 		}
 	}
 }

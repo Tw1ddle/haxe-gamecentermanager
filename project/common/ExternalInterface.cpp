@@ -179,8 +179,7 @@ extern "C" void sendGameCenterManagerEvent(const char* type, const char* availab
         return;
     }
     
-
-
+    // TODO
 }
 
 // UNIMPLEMENTED

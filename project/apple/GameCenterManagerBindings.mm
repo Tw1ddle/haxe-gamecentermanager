@@ -9,7 +9,7 @@
 #import "../../lib/GameCenterManager/GC Manager/GameCenterManager.h"
 #include "GameCenterManagerBindings.h"
 
-// TODO put these parameters into a struct or have multiple events?
+// TODO put these parameters into a struct or have multiple event handles?
 extern "C" void sendGameCenterManagerEvent(
 const char* type,
 const char* availabilityState,
@@ -36,15 +36,49 @@ bool showsCompletionBanner = false)
 	}];
 }
 
+#ifdef HX_MACOS
+@interface MyGKGameCenterControllerDelegate : NSObject<GKGameCenterControllerDelegate>
+@end
+
+@implementation MyGKGameCenterControllerDelegate
+
+- (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
+{
+    queueGameCenterManagerEvent("onGameCenterViewControllerFinished");
+}
+
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    
+    dispatch_once(&once, ^
+    {
+        sharedInstance = [self new];
+    });
+    
+    return sharedInstance;
+}
+
+@end
+#endif
+
 @interface MyGameCenterManagerDelegate : NSObject<GameCenterManagerDelegate>
 @end
 
 @implementation MyGameCenterManagerDelegate
 
+#ifdef IPHONE
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
 {
     queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
+#elif defined HX_MACOS
+- (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(NSViewController *)gameCenterLoginController
+{
+    queueGameCenterManagerEvent("shouldAuthenticateUser");
+}
+#endif
 
 - (void)gameCenterManager:(GameCenterManager *)manager availabilityChanged:(NSDictionary *)availabilityInformation
 {
@@ -199,20 +233,54 @@ namespace gamecentermanager
 	
 	void presentAchievements()
 	{
+#ifdef IPHONE
 		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		[[GameCenterManager sharedManager] presentAchievementsOnViewController: glView];
+#elif defined HX_MACOS
+        GKGameCenterViewController *achievementViewController = [[GKGameCenterViewController alloc] init];
+        achievementViewController.viewState = GKGameCenterViewControllerStateAchievements;
+        achievementViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil || mainWindow.windowController == nil)
+        {
+            return;
+        }
+        [mainWindow.windowController presentViewControllerAsModalWindow:achievementViewController];
+#endif
 	}
 	
 	void presentLeaderboards()
 	{
+#ifdef IPHONE
 		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		[[GameCenterManager sharedManager] presentLeaderboardsOnViewController: glView];
+#elif defined HX_MACOS
+        GKGameCenterViewController *leaderboardViewController = [[GKGameCenterViewController alloc] init];
+        leaderboardViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
+        leaderboardViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil || mainWindow.windowController == nil)
+        {
+            return;
+        }
+        [mainWindow.windowController presentViewControllerAsModalWindow:leaderboardViewController];
+#endif
 	}
 	
 	void presentChallenges()
 	{
+#ifdef IPHONE
 		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		[[GameCenterManager sharedManager] presentChallengesOnViewController: glView];
+#elif defined HX_MACOS
+        GKChallengesViewController *challengesViewController = [[GKChallengesViewController alloc] init];
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil || mainWindow.windowController == nil)
+        {
+            return;
+        }
+        [mainWindow.windowController presentViewControllerAsModalWindow:challengesViewController];
+#endif
 	}
 	
 	void resetAchievements()
