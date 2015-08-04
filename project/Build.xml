@@ -1,25 +1,38 @@
 <xml>
-	<include name="${HXCPP}/build-tool/BuildCommon.xml"/>
-	
-	<files id="common">
-		<compilerflag value="-Iinclude"/>
-		<file name="common/ExternalInterface.cpp"/>
-	</files>
-	
-	<files id="iphone">
-		<compilerflag value="-IiPhone/include"/>
-		<compilerflag value="-Iinclude"/>
-		<file name="iphone/GameCenterManager.mm"/>
-	</files>
-	
-	<target id="NDLL" output="${LIBPREFIX}gamecentermanager${debug_extra}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">	
-		<outdir name="../ndll/${BINDIR}"/>
-		<ext value=".ndll" if="windows || mac || linux"/>
-		<files id="common"/>
-		<files id="iphone" if="iphone"/>
-	</target>
-	
-	<target id="default">
-		<target id="NDLL"/>
-	</target>
+    <include name="${HXCPP}/build-tool/BuildCommon.xml"/>
+    
+    <files id="common">
+        <compilerflag value="-Iinclude"/>
+        <file name="common/ExternalInterface.cpp"/>
+    </files>
+    
+    <files id="iphone">
+        <compilerflag value="-IiPhone/include"/>
+        <compilerflag value="-Iinclude"/>
+        <file name="apple/GameCenterManagerBindings.mm"/>
+        <file name="../lib/GameCenterManager/GC Manager/GameCenterManager.m"/>
+        <file name="../lib/GameCenterManager/GC Manager/NSDataAES256.m"/>
+        <file name="../lib/GameCenterManager/GC Manager/Reachability.m"/>
+    </files>
+    
+    <files id="mac">
+        <compilerflag value="-Imac/include"/>
+        <compilerflag value="-Iinclude"/>
+        <file name="apple/GameCenterManagerBindings.mm"/>
+        <file name="../lib/GameCenterManager/GC Manager/GameCenterManager.m"/>
+        <file name="../lib/GameCenterManager/GC Manager/NSDataAES256.m"/>
+        <file name="../lib/GameCenterManager/GC Manager/Reachability.m"/>
+    </files>
+    
+    <target id="NDLL" output="${LIBPREFIX}gamecentermanager${debug_extra}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}">
+        <outdir name="../ndll/${BINDIR}"/>
+        <ext value=".ndll" if="windows || mac || linux"/>
+        <files id="common"/>
+        <files id="iphone" if="iphone"/>
+        <files id="mac" if="mac"/>
+    </target>
+    
+    <target id="default">
+        <target id="NDLL"/>
+    </target>
 </xml>

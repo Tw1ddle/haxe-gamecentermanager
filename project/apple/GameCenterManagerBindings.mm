@@ -1,9 +1,12 @@
+#ifdef IPHONE
 #import <UIKit/UIKit.h>
+#endif
+
 #import <CoreFoundation/CoreFoundation.h>
 #include <ctype.h>
 #include <objc/runtime.h>
 
-#import "GameCenterManager.h"
+#import "../../lib/GameCenterManager/GC Manager/GameCenterManager.h"
 #include "GameCenterManagerBindings.h"
 
 // TODO put these parameters into a struct or have multiple events?
@@ -18,14 +21,14 @@ float percentComplete,
 bool showsCompletionBanner);
  
 void queueGameCenterManagerEvent(
-const char* type,
-int availabilityState,
-int error,
-const char* identifier,
-int value,
-int rank,
-float percentComplete,
-bool showsCompletionBanner)
+const char* type = "NONE",
+int availabilityState = 0,
+int error = 0,
+const char* identifier = "",
+int value = 0,
+int rank = 0,
+float percentComplete = 0.0f,
+bool showsCompletionBanner = false)
 {
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ {
 		sendGameCenterManagerEvent(type, availabilityState, error, identifier, value, rank, percentComplete, showsCompletionBanner);
@@ -37,35 +40,35 @@ bool showsCompletionBanner)
 
 @implementation MyGameCenterManagerDelegate
 
+// TODO implement mac equivalent of uiviewcontroller stuff
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController {
-    [self presentViewController:gameCenterLoginController animated:YES completion:^{
-        NSLog(@"Finished Presenting Authentication Controller");
-    }];
+    // TODO
+    queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager availabilityChanged:(NSDictionary *)availabilityInformation {
-	// TODO
-	//queueGameCenterManagerEvent("onAvailabilityChanged", 
+	// TODO pass delegate parameters through
+    queueGameCenterManagerEvent("onAvailabilityChanged");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager error:(NSError *)error {
-	queueGameCenterManagerEvent("onError", 
+    queueGameCenterManagerEvent("onError");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager reportedAchievement:(GKAchievement *)achievement withError:(NSError *)error {
-	queueGameCenterManagerEvent("didReportAchievement",
+	queueGameCenterManagerEvent("didReportAchievement");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager reportedScore:(GKScore *)score withError:(NSError *)error {
-	queueGameCenterManagerEvent("didReportScore",
+	queueGameCenterManagerEvent("didReportScore");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveScore:(GKScore *)score {
-	queueGameCenterManagerEvent("didSaveScore",
+	queueGameCenterManagerEvent("didSaveScore");
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveAchievement:(GKAchievement *)achievement {
-	queueGameCenterManagerEvent("didSaveAchievement",
+	queueGameCenterManagerEvent("didSaveAchievement");
 }
 
 @end
@@ -97,7 +100,7 @@ namespace gamecentermanager
 	void saveAndReportScore(const char* leaderboardId, int score, int sortOrder)
 	{
 		NSString* nsLeaderboardId = [[NSString alloc] initWithUTF8String:leaderboardId];
-		[[GameCenterManager sharedManager] saveAndReportScore:score leaderboard:nsLeaderboardId sortOrder:sortOrder];
+		[[GameCenterManager sharedManager] saveAndReportScore:score leaderboard:nsLeaderboardId sortOrder:static_cast<GameCenterSortOrder>(sortOrder)];
 	}
 	
 	void saveAndReportAchievement(const char* identifier, float percentComplete, bool shouldDisplayNotification)
@@ -111,10 +114,14 @@ namespace gamecentermanager
 		[[GameCenterManager sharedManager] reportSavedScoresAndAchievements];
 	}
 	
-	void saveScoreToReportLater(const char* leaderboardId, int score, int sortOrder)
+	void saveScoreToReportLater(const char* leaderboardId, int score)
 	{
 		NSString* nsLeaderboardId = [[NSString alloc] initWithUTF8String:leaderboardId];
-		[[GameCenterManager sharedManager] saveScoreToReportLater:score leaderboard:nsLeaderboardId sortOrder:sortOrder];
+        
+        GKScore *gkScore = [[GKScore alloc] initWithLeaderboardIdentifier:nsLeaderboardId];
+        gkScore.value = score;
+        
+		[[GameCenterManager sharedManager] saveScoreToReportLater:gkScore];
 	}
 	
 	void saveAchievementToReportLater(const char* identifier, float percentComplete)
@@ -126,20 +133,20 @@ namespace gamecentermanager
 	int highScoreForLeaderboard(const char* identifier)
 	{
 		NSString* nsIdentifier = [[NSString alloc] initWithUTF8String:identifier];
-		return [[GameCenterManager sharedManager] highScoreForLeaderboard:identifier];
+		return [[GameCenterManager sharedManager] highScoreForLeaderboard:nsIdentifier];
 	}
 	
 	float progressForAchievement(const char* identifier)
 	{
 		NSString* nsIdentifier = [[NSString alloc] initWithUTF8String:identifier];
-		return [[GameCenterManager sharedManager] progressForAchievement:identifier];
+		return [[GameCenterManager sharedManager] progressForAchievement:nsIdentifier];
 	}
 	
 	void requestChallenges()
 	{
 		[[GameCenterManager sharedManager] getChallengesWithCompletion:^(NSArray *challenges, NSError *error) {
-			queueGameCenterManagerEvent("onChallengesRequestComplete", // TODO
-		}];
+            queueGameCenterManagerEvent("onChallengesRequestComplete");
+        }];
 	}
 	
 	void presentAchievements()
@@ -162,7 +169,9 @@ namespace gamecentermanager
 	
 	void resetAchievements()
 	{
-		[[GameCenterManager sharedManager] resetAchievements];
+        [[GameCenterManager sharedManager] resetAchievementsWithCompletion:^(NSError *error) {
+            queueGameCenterManagerEvent("onAchievementsReset");
+        }];
 	}
 	
 	bool isInternetAvailable()

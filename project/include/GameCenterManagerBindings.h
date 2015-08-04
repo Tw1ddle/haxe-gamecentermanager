@@ -14,9 +14,13 @@ namespace gamecentermanager
 	int highScoreForLeaderboard(const char* identifier);
 	float progressForAchievement(const char* identifier);
 	void requestChallenges();
+    
+#ifdef IPHONE
 	void presentAchievements();
 	void presentLeaderboards();
 	void presentChallenges();
+#endif
+    
 	void resetAchievements();
 	bool isInternetAvailable();
 	bool isGameCenterAvailable();
