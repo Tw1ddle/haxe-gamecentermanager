@@ -50,8 +50,14 @@ class Main extends Sprite {
 	}
 	
 	private function setupGame():Void {
+#if ios
+		// Attempt to workaround touch issue on iPhone 6 Plus and iPad Air, iPad Air 2 (tablet retina devices)
+		var stageWidth:Int = cast Math.max(Capabilities.screenResolutionX, Capabilities.screenResolutionY);
+		var stageHeight:Int = cast Math.min(Capabilities.screenResolutionX, Capabilities.screenResolutionY);
+#else
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
+#end
 
 		if (zoom == -1) {
 			var ratioX:Float = stageWidth / gameWidth;
