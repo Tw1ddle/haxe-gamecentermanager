@@ -326,12 +326,22 @@ namespace gamecentermanager
 	const char* localPlayerId()
 	{
 		NSString* nsLocalPlayerId = [[GameCenterManager sharedManager] localPlayerId];
+		if(nsLocalPlayerId == nil)
+		{
+			return "";
+		}
+		
 		return [nsLocalPlayerId cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	}
 	
 	const char* localPlayerDisplayName()
 	{
 		NSString* nsLocalPlayerDisplayName = [[GameCenterManager sharedManager] localPlayerDisplayName];
+		if(nsLocalPlayerDisplayName == nil)
+		{
+			return "";
+		}
+		
 		return [nsLocalPlayerDisplayName cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	}
 	
@@ -341,8 +351,13 @@ namespace gamecentermanager
 	}
 	
 	const char* cryptKey()
-	{
+	{	
 		NSString* nsCryptKey = [[GameCenterManager sharedManager] cryptKey];
+		if(nsCryptKey == nil)
+		{
+			return "";
+		}
+		
 		return [nsCryptKey cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	}
 	
