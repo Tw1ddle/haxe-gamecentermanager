@@ -84,19 +84,26 @@ bool showsCompletionBanner = false)
 #ifdef IPHONE
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
 {
+    NSLog(@"authenticateUser called");
+    
     UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
     [glView presentViewController:gameCenterLoginController animated:YES completion:^{
         queueGameCenterManagerEvent("shouldAuthenticateUser");
+        NSLog(@"Completed presenting login controller");
     }];
 }
 #elif defined HX_MACOS
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(NSViewController *)gameCenterLoginController
 {
+    NSLog(@"authenticateUser called");
+    
     NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
     if(mainWindow == nil || mainWindow.windowController == nil)
     {
+        NSLog(@"authenticateUser exited early because the main window or window controller was nil");
         return;
     }
+    
 	[mainWindow.windowController presentViewControllerAsModalWindow:gameCenterLoginController];
     queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
@@ -104,6 +111,12 @@ bool showsCompletionBanner = false)
 
 - (void)gameCenterManager:(GameCenterManager *)manager availabilityChanged:(NSDictionary *)availabilityInformation
 {
+    NSLog(@"Game Center availability changed");
+    
+    for (id key in availabilityInformation) {
+        NSLog(@"Availability information key: %@, value: %@ \n", key, [availabilityInformation objectForKey:key]);
+    }
+    
 	const char* status = "UNKNOWN";
 	
 	if ([[availabilityInformation objectForKey:@"status"] isEqualToString:@"GameCenter Available"]) 
@@ -124,12 +137,16 @@ bool showsCompletionBanner = false)
 	{
 		errorCode = error.code;
 	}
+    
+    NSLog(@"Game Center Manager error %@", [error localizedDescription]);
 	
     queueGameCenterManagerEvent("onError", "", errorCode);
 }
 
 - (void)gameCenterManager:(GameCenterManager *)manager reportedAchievement:(GKAchievement *)achievement withError:(NSError *)error
 {
+    NSLog(@"Reported achievement");
+    
 	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	float percentComplete = achievement.percentComplete;
 	bool showsCompletionBanner = achievement.showsCompletionBanner;
@@ -145,6 +162,8 @@ bool showsCompletionBanner = false)
 
 - (void)gameCenterManager:(GameCenterManager *)manager reportedScore:(GKScore *)score withError:(NSError *)error 
 {
+    NSLog(@"Reported score");
+    
 	const char* identifier = [score.leaderboardIdentifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	int value = score.value;
 	int rank = score.rank;
@@ -159,6 +178,8 @@ bool showsCompletionBanner = false)
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveScore:(GKScore *)score
 {
+    NSLog(@"Did save score");
+    
 	const char* identifier = [score.leaderboardIdentifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	int value = score.value;
 	int rank = score.rank;
@@ -168,6 +189,8 @@ bool showsCompletionBanner = false)
 
 - (void)gameCenterManager:(GameCenterManager *)manager didSaveAchievement:(GKAchievement *)achievement
 {
+    NSLog(@"Did save achievement");
+    
 	const char* identifier = [achievement.identifier cStringUsingEncoding:[NSString defaultCStringEncoding]];
 	float percentComplete = achievement.percentComplete;
 	bool showsCompletionBanner = achievement.showsCompletionBanner;
@@ -181,12 +204,14 @@ namespace gamecentermanager
 {
 	void setupManager()
 	{
+        NSLog(@"Game Center Manager initializing without encryption");
 		[[GameCenterManager sharedManager] setupManager];
 		[[GameCenterManager sharedManager] setDelegate:[MyGameCenterManagerDelegate sharedInstance]];
 	}
 	
 	void setupManagerAndSetShouldCryptWithKey(const char* cryptKey)
 	{
+        NSLog(@"Game Center Manager initializing with encryption");
 		NSString *nsCryptKey = [[NSString alloc] initWithUTF8String:cryptKey];
 		[[GameCenterManager sharedManager] setupManagerAndSetShouldCryptWithKey:nsCryptKey];
         [[GameCenterManager sharedManager] setDelegate:[MyGameCenterManagerDelegate sharedInstance]];
