@@ -1,4 +1,4 @@
-package extension.GameCenterManager;
+package extension.gamecentermanager;
 
 import flash.Lib;
 
@@ -22,7 +22,7 @@ class GameCenterManager {
 	}
 	
 	public static function setupManagerAndSetShouldCryptWithKey(cryptKey:String):Void {
-		setup_manager_with_crypt_key(cryptKey);
+		setup_manager_and_set_should_crypt_with_key(cryptKey);
 	}
 	
 	public static function authenticateUser():Void {
@@ -46,7 +46,7 @@ class GameCenterManager {
 	}
 	
 	public static function saveScoreToReportLater(leaderboardId:String, score:Int):Void {
-		save_score_to_report_later(leaderboardId, score, sortOrder);
+		save_score_to_report_later(leaderboardId, score);
 	}
 	
 	public static function saveAchievementToReportLater(identifier:String, percentComplete:Float):Void {
@@ -85,7 +85,7 @@ class GameCenterManager {
 		return is_internet_available();
 	}
 	
-	private static function isGameCenterAvailable():Bool {
+	public static function isGameCenterAvailable():Bool {
 		return is_game_center_available();
 	}
 	
@@ -112,7 +112,7 @@ class GameCenterManager {
 	private static var setup_manager = Lib.load(libName, "setup_manager", 0);
 	private static var setup_manager_and_set_should_crypt_with_key = Lib.load(libName, "setup_manager_and_set_should_crypt_with_key", 1);
 	private static var authenticate_user = Lib.load(libName, "authenticate_user", 0);
-	private static var sync_game_center = Lib.load(libName, "sync_game_center, 0);
+	private static var sync_game_center = Lib.load(libName, "sync_game_center", 0);
 	private static var save_and_report_score = Lib.load(libName, "save_and_report_score", 3);
 	private static var save_and_report_achievement = Lib.load(libName, "save_and_report_achievement", 3);
 	private static var report_saved_scores_and_achievements = Lib.load(libName, "report_saved_scores_and_achievements", 0);

@@ -68,17 +68,36 @@ bool showsCompletionBanner = false)
 
 @implementation MyGameCenterManagerDelegate
 
++ (instancetype)sharedInstance
+{
+    static dispatch_once_t once;
+    static id sharedInstance;
+    
+    dispatch_once(&once, ^
+                  {
+                      sharedInstance = [self new];
+                  });
+    
+    return sharedInstance;
+}
+
 #ifdef IPHONE
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(UIViewController *)gameCenterLoginController 
 {
-    [self presentViewController:gameCenterLoginController animated:YES completion:^{
+    UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    [glView presentViewController:gameCenterLoginController animated:YES completion:^{
         queueGameCenterManagerEvent("shouldAuthenticateUser");
-    }];	
+    }];
 }
 #elif defined HX_MACOS
 - (void)gameCenterManager:(GameCenterManager *)manager authenticateUser:(NSViewController *)gameCenterLoginController
 {
-	[self presentViewControllerAsModalWindow:gameCenterLoginController];
+    NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+    if(mainWindow == nil || mainWindow.windowController == nil)
+    {
+        return;
+    }
+	[mainWindow.windowController presentViewControllerAsModalWindow:gameCenterLoginController];
     queueGameCenterManagerEvent("shouldAuthenticateUser");
 }
 #endif
@@ -162,34 +181,20 @@ namespace gamecentermanager
 {
 	void setupManager()
 	{
-		MyGameCenterManagerDelegate *delegate = [MyGameCenterManagerDelegate new];
-	
 		[[GameCenterManager sharedManager] setupManager];
-		[[GameCenterManager sharedManager] setDelegate:delegate];
+		[[GameCenterManager sharedManager] setDelegate:[MyGameCenterManagerDelegate sharedInstance]];
 	}
 	
 	void setupManagerAndSetShouldCryptWithKey(const char* cryptKey)
 	{
 		NSString *nsCryptKey = [[NSString alloc] initWithUTF8String:cryptKey];
 		[[GameCenterManager sharedManager] setupManagerAndSetShouldCryptWithKey:nsCryptKey];
-		
-		MyGameCenterManagerDelegate *delegate = [MyGameCenterManagerDelegate new];
-		[[GameCenterManager sharedManager] setDelegate:delegate];
+        [[GameCenterManager sharedManager] setDelegate:[MyGameCenterManagerDelegate sharedInstance]];
 	}
 	
 	void authenticateUser()
 	{
-		#ifdef IPHONE
-		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
-		[[GameCenterManager sharedManager] authenticateUser:glView];
-		#elif defined HX_MACOS
-        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
-        if(mainWindow == nil || mainWindow.windowController == nil)
-        {
-            return;
-        }
-		[[GameCenterManager sharedManager] authenticateUser:mainWindow.windowController];
-		#endif
+        [[GameCenterManager sharedManager] checkGameCenterAvailability];
 	}
 	
 	void syncGameCenter()

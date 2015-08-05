@@ -16,20 +16,20 @@ class GameCenterPlayState extends BasePlayState {
 	override public function create():Void {
 		super.create();
 		
-		var x = 200;
-		var y = 20;
+		var x:Int = 200;
+		var y:Int = 20;
 		
-		var addButton(msg:String, cb:Void->Void) = {
+		var addButton = function(msg:String, cb:Void->Void) {
 			var button = new TextButton(x, y, msg, cb);
 			add(button);
 			
-			x += button.width + 20;
+			x += Std.int(button.width + 20);
 			
 			if (x + button.width + 20 >= FlxG.width) {
-				y += button.height + 20;
+				y += Std.int(button.height + 20);
 				x = 200;
 			}
-		}
+		};
 		
 		addButton("Player Id", function() {
 			addText("Player Id: " + GameCenterManager.localPlayerId);
@@ -53,12 +53,12 @@ class GameCenterPlayState extends BasePlayState {
 		});
 		addButton("Save + Report Score", function() {
 			addText("Saving And Reporting Score (" + score + ")");
-			GameCenterManager.saveAndReportScore(LEADERBOARD_ID, score);
+			GameCenterManager.saveAndReportScore(LEADERBOARD_ID, score, GameCenterSortOrder.HighToLow);
 			score++;
 		});
 		addButton("Save + Report Achievement", function() {
-			addText("Saving And Reporting Achievement: "
-			GameCenterManager.saveAndReportAchievement(ACHIEVEMENT_ID, 100, true);
+			addText("Saving And Reporting Achievement");
+			GameCenterManager.saveAndReportAchievement(ACHIEVEMENT_ID, 100.0, true);
 		});
 		addButton("Report Saved Scores + Achievements", function() {
 			addText("Reporting Saved Scores and Achievements");
@@ -71,18 +71,18 @@ class GameCenterPlayState extends BasePlayState {
 		});
 		addButton("Save Achievement For Later", function() {
 			addText("Saving Achievement For Later");
-			GameCenterManager.saveAchievementToReportLater(ACHIEVEMENT_ID, 100);
+			GameCenterManager.saveAchievementToReportLater(ACHIEVEMENT_ID, 100.0);
 		});
 		addButton("Highscore For Leaderboard", function() {
-			addText("Highscore For Leaderboard " + GameCenterManager.highScoreForLeaderboard(identifier));
+			addText("Highscore For Leaderboard " + GameCenterManager.highScoreForLeaderboard(LEADERBOARD_ID));
 		});
 		addButton("Progress For Achievement", function() {
-			addText("Progress FOr Achievement " + GameCenterManager.progressForAchievement(identifier));
+			addText("Progress For Achievement " + GameCenterManager.progressForAchievement(ACHIEVEMENT_ID));
 		});
-		addButton("Request Challenges", function() {
-			addText("Requesting Challenges");
-			GameCenterManager.requestChallenges();
-		});
+		//addButton("Request Challenges", function() {
+		//	addText("Requesting Challenges");
+		//	GameCenterManager.requestChallenges();
+		//});
 		addButton("Present Achievements", function() {
 			addText("Presenting Achievements");
 			 GameCenterManager.presentAchievements();
@@ -91,10 +91,10 @@ class GameCenterPlayState extends BasePlayState {
 			addText("Presenting Leaderboards");
 			GameCenterManager.presentLeaderboards();
 		});
-		addButton("Present Challenges", function() {
-			addText("Presenting Challenges");
-			GameCenterManager.presentChallenges();
-		});
+		//addButton("Present Challenges", function() {
+		//	addText("Presenting Challenges");
+		//	GameCenterManager.presentChallenges();
+		//});
 		addButton("Reset Achievements", function() {
 			addText("Resetting Achievements");
 			GameCenterManager.resetAchievements();
@@ -157,9 +157,9 @@ class MyGameCenterManagerListener extends GameCenterManagerListener {
 		game.addText("onAchievementsReset");
 	}
 	
-	override public function onChallengesRequestComplete(challenges:Array<Challenge>, error:String):Void { // TODO
-		game.addText("onChallengesRequestComplete");
-	}
+	//override public function onChallengesRequestComplete(challenges:Array<Challenge>, error:String):Void { // TODO
+	//	game.addText("onChallengesRequestComplete");
+	//}
 
 	// Note Mac only, and only when achievements/leaderboards views finish, not challenges
 	override public function onGameCenterViewControllerFinished() {

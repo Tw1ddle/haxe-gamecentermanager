@@ -1,4 +1,4 @@
-package extension.GameCenterManager;
+package extension.gamecentermanager;
 
 @:enum abstract AvailabilityState(String) {
 	var UNKNOWN = "UNKNOWN";
@@ -32,9 +32,6 @@ class GameCenterManagerListener {
 	}
 	
 	public function onAchievementsReset():Void {
-	}
-	
-	public function onChallengesRequestComplete(challenges:Array<Challenge>, error:String):Void { // TODO
 	}
 
 	// Note Mac only, and only when achievements/leaderboards views finish, not challenges
@@ -91,10 +88,13 @@ class GameCenterManagerListener {
 			case ON_ACHIEVEMENTS_RESET:
 				onAchievementsReset();
 			case ON_CHALLENGES_REQUEST_COMPLETE:
-				// TODO
-				//var challenges:Array<
+				// UNIMPLEMENTED
 			case ON_GAME_CENTER_VIEW_CONTROLLER_FINISHED:
 				onGameCenterViewControllerFinished();
 		}
 	}
+
+	// UNIMPLEMENTED
+	//public function onChallengesRequestComplete(challenges:Array<Challenge>, error:String):Void {
+	//}
 }
