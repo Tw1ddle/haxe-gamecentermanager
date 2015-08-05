@@ -7,6 +7,9 @@ package extension.GameCenterManager;
 }
 
 class GameCenterManagerListener {
+	public function new() {
+	}
+
 	public function shouldAuthenticateUser():Void {
 	}
 	
