@@ -4,10 +4,10 @@ import flixel.FlxState;
 class BasePlayState extends FlxState {
 	private var eventText:TextItem;
 	
-	public function new() {
-		super();
+	override public function create() {
+		super.create();
 		
-		eventText = new TextItem(0, 0, "Starting...");
+		eventText = new TextItem(0, 0, "Starting...", 12);
 		add(eventText);
 	}
 	

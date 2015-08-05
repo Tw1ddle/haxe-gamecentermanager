@@ -21,7 +21,7 @@ class GameCenterPlayState extends BasePlayState {
 		GameCenterManager.setupManager();
 		addText("Setting Game Center Manager listener...");
 		GameCenterManager.setListener(new MyGameCenterManagerListener(this));
-		//GameCenterManager.setupManagerAndSetShouldCryptWithKey();
+		//GameCenterManager.setupManagerAndSetShouldCryptWithKey("todo");
 		
 		addText("Creating buttons...");
 		
@@ -31,6 +31,10 @@ class GameCenterPlayState extends BasePlayState {
 		var buttonGroup = new FlxTypedSpriteGroup<TextButton>();
 		var addButton = function(msg:String, cb:Void->Void) {
 			var button = new TextButton(x, y, msg, cb);
+			
+			button.scale.set(1, 4);
+			button.updateHitbox();
+			button.label.offset.y = -20;
 			buttonGroup.add(button);
 			
 			x += Std.int(button.width + 20);
