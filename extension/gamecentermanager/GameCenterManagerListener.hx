@@ -47,7 +47,7 @@ class GameCenterManagerListener {
 	private static inline var DID_SAVE_SCORE:String = "didSaveScore";
 	private static inline var ON_ACHIEVEMENTS_RESET:String = "onAchievementsReset";
 	private static inline var ON_CHALLENGES_REQUEST_COMPLETE:String = "onChallengesRequestComplete";
-	private static inline var ON_GAME_CENTER_VIEW_CONTROLLER_FINISHED:String = “onGameCenterViewControllerFinished”;
+	private static inline var ON_GAME_CENTER_VIEW_CONTROLLER_FINISHED:String = "onGameCenterViewControllerFinished";
 	
 	public function notify(inEvent:Dynamic):Void {
 		var type:String = null;
