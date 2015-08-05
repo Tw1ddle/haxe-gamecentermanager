@@ -137,11 +137,11 @@ static value is_internet_available()
 }
 DEFINE_PRIM(is_internet_available, 0);
 
-static value is_gamecenter_available()
+static value is_game_center_available()
 {
 	return alloc_bool(isGameCenterAvailable());
 }
-DEFINE_PRIM(is_gamecenter_available, 0);
+DEFINE_PRIM(is_game_center_available, 0);
 
 static value local_player_id()
 {
