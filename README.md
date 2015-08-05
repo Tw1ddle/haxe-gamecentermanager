@@ -2,7 +2,7 @@
 
 WORK IN PROGRESS.
 
-Unofficial GameCenterManager Haxe bindings for OSX and iOS. 
+Unofficial [GameCenterManager](https://github.com/nihalahmed/GameCenterManager) Haxe bindings for OSX and iOS. 
 
 ### Features ###
 
@@ -32,13 +32,13 @@ Include the haxelib through Project.xml:
 <haxelib name="gamecentermanager" />
 ```
 
+Basic usage:
 ```haxe
 import extension.gamecentermanager.GameCenterManager;
 import extension.gamecentermanager.GameCenterManagerListener;
 
-// Basic usage
 GameCenterManager.setupManager();
-GameCenterManager.setListener(new GameCenterManagerListener()); // Optional. Implement your own listener.
+GameCenterManager.setListener(new GameCenterManagerListener()); // Extend the default listener to manage events yourself.
 GameCenterManager.authenticateUser();
 
 // A bit later...
@@ -53,7 +53,7 @@ if(GameCenterManager.isGameCenterAvailable()) {
 }
 ```
 
-See the demo app bundled in this distribution for another usage example.
+See the demo app bundled in this distribution for another usage example. Refer to the [GameCenterManager documentation](https://github.com/nihalahmed/GameCenterManager) for an explanation of what each method does.
 
 ### Notes ###
 GameCenterManager supports iOS 7.0 and OSX 10.9 and higher deployment targets.
