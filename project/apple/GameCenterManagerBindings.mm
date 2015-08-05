@@ -9,16 +9,7 @@
 #import "../../lib/GameCenterManager/GC Manager/GameCenterManager.h"
 #include "GameCenterManagerBindings.h"
 
-// TODO put these parameters into a struct or have multiple event handles?
-extern "C" void sendGameCenterManagerEvent(
-const char* type,
-const char* availabilityState,
-int error,
-const char* identifier,
-int value,
-int rank,
-float percentComplete,
-bool showsCompletionBanner);
+extern "C" void sendGameCenterManagerEvent(const char* type, gamecentermanager::GameCenterManagerEventData data);
  
 void queueGameCenterManagerEvent(
 const char* type,
@@ -32,7 +23,16 @@ bool showsCompletionBanner = false)
 {
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^ 
 	{
-		sendGameCenterManagerEvent(type, availabilityState, error, identifier, value, rank, percentComplete, showsCompletionBanner);
+        gamecentermanager::GameCenterManagerEventData data;
+        data.availabilityState = availabilityState;
+        data.error = error;
+        data.identifier = identifier;
+        data.value = value;
+        data.rank = rank;
+        data.percentComplete = percentComplete;
+        data.showsCompletionBanner = showsCompletionBanner;
+        
+		sendGameCenterManagerEvent(type, data);
 	}];
 }
 
@@ -74,9 +74,9 @@ bool showsCompletionBanner = false)
     static id sharedInstance;
     
     dispatch_once(&once, ^
-                  {
-                      sharedInstance = [self new];
-                  });
+    {
+        sharedInstance = [self new];
+    });
     
     return sharedInstance;
 }

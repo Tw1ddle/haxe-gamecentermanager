@@ -3,6 +3,17 @@
 
 namespace gamecentermanager
 {
+    typedef struct
+    {
+        const char* availabilityState;
+        int error;
+        const char* identifier;
+        int value;
+        int rank;
+        float percentComplete;
+        bool showsCompletionBanner;
+    } GameCenterManagerEventData;
+    
 	void setupManager();
 	void setupManagerAndSetShouldCryptWithKey(const char* cryptKey);
 	void authenticateUser();

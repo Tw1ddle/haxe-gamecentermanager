@@ -2,7 +2,7 @@ package;
 import flixel.FlxState;
 
 class BasePlayState extends FlxState {
-	private var eventText:TextItem;
+	public var eventText:TextItem;
 	
 	override public function create() {
 		super.create();

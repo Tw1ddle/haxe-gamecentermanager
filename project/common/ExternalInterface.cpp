@@ -7,7 +7,6 @@
 #endif
 
 #include <hx/CFFI.h>
-
 #include "GameCenterManagerBindings.h"
 
 using namespace gamecentermanager;
@@ -178,15 +177,26 @@ extern "C" int gamecentermanager_register_prims()
 	return 0;
 }
 
-// TODO use struct instead of all these parameters, or multiple events
-extern "C" void sendGameCenterManagerEvent(const char* type, const char* availabilityState, int error, const char* identifier, int value, int rank, float percentComplete, bool showsCompletionBanner)
+extern "C" void sendGameCenterManagerEvent(const char* type, GameCenterManagerEventData data)
 {
     if(gameCenterManagerEventHandle == 0)
     {
         return;
     }
     
-    // TODO
+    // TODO could be faster to only alloc the required fields
+    value o = alloc_empty_object();
+    alloc_field(o, val_id("type"), alloc_string(type));
+    
+    alloc_field(o, val_id("availabilityState"), alloc_string(data.availabilityState));
+    alloc_field(o, val_id("error"), alloc_int(data.error));
+    alloc_field(o, val_id("identifier"), alloc_string(data.identifier));
+    alloc_field(o, val_id("value"), alloc_int(data.value));
+    alloc_field(o, val_id("rank"), alloc_int(data.rank));
+    alloc_field(o, val_id("percentComplete"), alloc_float(data.percentComplete));
+    alloc_field(o, val_id("showsCompletionBanner"), alloc_bool(data.showsCompletionBanner));
+    
+    val_call1(gameCenterManagerEventHandle->get(), o);
 }
 
 // UNIMPLEMENTED

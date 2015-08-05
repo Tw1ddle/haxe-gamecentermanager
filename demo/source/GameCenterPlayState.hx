@@ -40,7 +40,7 @@ class GameCenterPlayState extends BasePlayState {
 			x += Std.int(button.width + 20);
 			
 			if (x + button.width + 20 >= FlxG.width) {
-				y += Std.int(button.height + 20);
+				y += Std.int(button.height + 10);
 				x = 200;
 			}
 		};
