@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxSpriteGroup;
 import flixel.text.FlxText;
 
 import extension.gamecentermanager.GameCenterManager;
@@ -27,9 +28,10 @@ class GameCenterPlayState extends BasePlayState {
 		var x:Int = 200;
 		var y:Int = 20;
 		
+		var buttonGroup = new FlxTypedSpriteGroup<TextButton>();
 		var addButton = function(msg:String, cb:Void->Void) {
 			var button = new TextButton(x, y, msg, cb);
-			add(button);
+			buttonGroup.add(button);
 			
 			x += Std.int(button.width + 20);
 			
@@ -117,6 +119,8 @@ class GameCenterPlayState extends BasePlayState {
 			clearTextLog();
 			addText("Cleared Text Log...");
 		});
+		
+		add(buttonGroup);
 		
 		addText("Initialization complete...");
 	}
