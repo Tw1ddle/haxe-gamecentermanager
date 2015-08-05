@@ -16,6 +16,14 @@ class GameCenterPlayState extends BasePlayState {
 	override public function create():Void {
 		super.create();
 		
+		addText("Setting up Game Center Manager...");
+		GameCenterManager.setupManager();
+		addText("Setting Game Center Manager listener...");
+		GameCenterManager.setListener(new MyGameCenterManagerListener());
+		//GameCenterManager.setupManagerAndSetShouldCryptWithKey();
+		
+		addText("Creating buttons...");
+		
 		var x:Int = 200;
 		var y:Int = 20;
 		
@@ -91,10 +99,10 @@ class GameCenterPlayState extends BasePlayState {
 			addText("Presenting Leaderboards");
 			GameCenterManager.presentLeaderboards();
 		});
-		//addButton("Present Challenges", function() {
-		//	addText("Presenting Challenges");
-		//	GameCenterManager.presentChallenges();
-		//});
+		addButton("Present Challenges", function() {
+			addText("Presenting Challenges");
+			GameCenterManager.presentChallenges();
+		});
 		addButton("Reset Achievements", function() {
 			addText("Resetting Achievements");
 			GameCenterManager.resetAchievements();
@@ -109,6 +117,8 @@ class GameCenterPlayState extends BasePlayState {
 			clearTextLog();
 			addText("Cleared Text Log...");
 		});
+		
+		addText("Initialization complete...");
 	}
 	
 	private function set_score(score:Int):Int {
