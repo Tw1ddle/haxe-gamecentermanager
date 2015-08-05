@@ -19,7 +19,7 @@ class GameCenterPlayState extends BasePlayState {
 		addText("Setting up Game Center Manager...");
 		GameCenterManager.setupManager();
 		addText("Setting Game Center Manager listener...");
-		GameCenterManager.setListener(new MyGameCenterManagerListener());
+		GameCenterManager.setListener(new MyGameCenterManagerListener(this));
 		//GameCenterManager.setupManagerAndSetShouldCryptWithKey();
 		
 		addText("Creating buttons...");

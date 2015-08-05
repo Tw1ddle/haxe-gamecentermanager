@@ -3,5 +3,14 @@
 	<ndll name="gamecentermanager" if="ios || mac" />
 
 	<section if="ios">
+        <dependency name="GameKit.framework" />
+        <dependency name="SystemConfiguration.framework" />
 	</section>
+    
+    <section if="mac">
+        <dependency name="GameKit.framework" />
+        <dependency name="SystemConfiguration.framework" />
+        <dependency name="Security.framework" />
+        <dependency name="CFNetwork.framework" />
+    </section>
 </project>
