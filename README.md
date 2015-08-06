@@ -12,11 +12,11 @@ Supports:
 * Single API for Game Center across iOS and Mac OSX.
 
 Doesn't Support:
-* Fetching challenges.
-* Exposing local player data or profile image to Haxe.
+* Fetching player challenges.
+* Exposing local player data or profile images to Haxe.
 
 If there is something you would like adding let me know. Here it is in action:
-	
+
 ![Screenshot of it working](https://github.com/Tw1ddle/haxe-gamecentermanager/blob/master/demo/screenshots/unavailable.png?raw=true "Screenshot")
 
 ### Install ###
@@ -38,7 +38,7 @@ import extension.gamecentermanager.GameCenterManager;
 import extension.gamecentermanager.GameCenterManagerListener;
 
 GameCenterManager.setupManager();
-GameCenterManager.setListener(new GameCenterManagerListener()); // Extend the default listener to manage events yourself.
+GameCenterManager.setListener(new GameCenterManagerListener()); // Extend the default listener to manage events yourself
 GameCenterManager.authenticateUser();
 
 // A bit later...
@@ -58,7 +58,8 @@ Refer to the [GameCenterManager documentation](https://github.com/nihalahmed/Gam
 ### Notes ###
 GameCenterManager supports iOS 7.0+ and OSX 10.9+ deployment targets.
 
-The ndlls are compiled with the ```-DOBJC_ARC``` flag:
+The ndlls must be compiled with the ```-DOBJC_ARC``` flag. Since the legacy runtime does not support ARC, only 64-bit is supported on Mac.
+
 ```
 haxelib run hxcpp Build.xml -Dmac -DHXCPP_M64 -DOBJC_ARC
 haxelib run hxcpp Build.xml -Diphoneos -DOBJC_ARC
@@ -68,8 +69,6 @@ haxelib run hxcpp Build.xml -Diphonesim -DHXCPP_M64 -DOBJC_ARC
 haxelib run hxcpp Build.xml -Diphonesim -DOBJC_ARC
 ```
 
-Since the legacy runtime does not support ARC, only 64-bit is supported on Mac.
+Note that the ```GameCenterManager.authenticateUser``` method is not guaranteed to raise an authentication challenge dialog, so do not suspend your app or expect a view to be dismissed after calling this method.
 
-Remember to follow Apple's documentation when testing your Game Center aware app. GameCenterManager will return ```GameCenterAvailable = false```, even when Game Center is in sandbox mode.
-
-Note that the ```GameCenterManager.authenticateUser``` method is asynchronous but is not guaranteed to bring up an authentication challenge view. So I do not recommend suspending your app or waiting for the view to be dismissed after calling this method.
+Remember to follow Apple's documentation during testing, you need to set up a sandbox account etc.
