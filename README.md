@@ -1,4 +1,4 @@
-# Haxe-GameCenterManager
+# Haxe GameCenterManager
 
 WORK IN PROGRESS.
 
