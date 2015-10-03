@@ -286,14 +286,21 @@ namespace gamecentermanager
 		[[GameCenterManager sharedManager] presentAchievementsOnViewController: glView];
 #elif defined HX_MACOS
         GKGameCenterViewController *achievementViewController = [[GKGameCenterViewController alloc] init];
-        achievementViewController.viewState = GKGameCenterViewControllerStateAchievements;
-        achievementViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
-        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
-        if(mainWindow == nil || mainWindow.windowController == nil)
+        if(achievementViewController == nil)
         {
             return;
         }
-        [mainWindow.windowController presentViewControllerAsModalWindow:achievementViewController];
+        achievementViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
+        achievementViewController.viewState = GKGameCenterViewControllerStateAchievements;
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil)
+        {
+            return;
+        }
+        
+        GKDialogController* sdc = [GKDialogController sharedDialogController];
+        sdc.parentWindow = mainWindow;
+        [sdc presentViewController: achievementViewController];
 #endif
 	}
 	
@@ -304,14 +311,22 @@ namespace gamecentermanager
 		[[GameCenterManager sharedManager] presentLeaderboardsOnViewController: glView];
 #elif defined HX_MACOS
         GKGameCenterViewController *leaderboardViewController = [[GKGameCenterViewController alloc] init];
-        leaderboardViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
-        leaderboardViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
-        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
-        if(mainWindow == nil || mainWindow.windowController == nil)
+        if(leaderboardViewController == nil)
         {
             return;
         }
-        [mainWindow.windowController presentViewControllerAsModalWindow:leaderboardViewController];
+        leaderboardViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
+        leaderboardViewController.viewState = GKGameCenterViewControllerStateLeaderboards;
+        leaderboardViewController.leaderboardTimeScope = GKLeaderboardTimeScopeToday;
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil)
+        {
+            return;
+        }
+        
+        GKDialogController* sdc = [GKDialogController sharedDialogController];
+        sdc.parentWindow = mainWindow;
+        [sdc presentViewController: leaderboardViewController];
 #endif
 	}
 	
@@ -321,13 +336,22 @@ namespace gamecentermanager
 		UIViewController *glView = [[[UIApplication sharedApplication] keyWindow] rootViewController];
 		[[GameCenterManager sharedManager] presentChallengesOnViewController: glView];
 #elif defined HX_MACOS
-        GKChallengesViewController *challengesViewController = [[GKChallengesViewController alloc] init];
-        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
-        if(mainWindow == nil || mainWindow.windowController == nil)
+        GKGameCenterViewController *challengesViewController = [[GKGameCenterViewController alloc] init];
+        if(challengesViewController == nil)
         {
             return;
         }
-        [mainWindow.windowController presentViewControllerAsModalWindow:challengesViewController];
+        challengesViewController.gameCenterDelegate = [MyGKGameCenterControllerDelegate sharedInstance];
+        challengesViewController.viewState = GKGameCenterViewControllerStateChallenges;
+        NSWindow* mainWindow = [[NSApplication sharedApplication] mainWindow];
+        if(mainWindow == nil)
+        {
+            return;
+        }
+        
+        GKDialogController* sdc = [GKDialogController sharedDialogController];
+        sdc.parentWindow = mainWindow;
+        [sdc presentViewController: challengesViewController];
 #endif
 	}
 	
