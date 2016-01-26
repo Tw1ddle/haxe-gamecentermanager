@@ -2,6 +2,8 @@
 
 WORK IN PROGRESS.
 
+*GameCenterManager is being [rewritten](https://github.com/nihalahmed/GameCenterManager/tree/swift-refactor) in Swift, once this is completed it will switch over to Swift from Objective-C. So it is unlikely that I will finish these bindings.*
+
 [GameCenterManager](https://github.com/nihalahmed/GameCenterManager) Haxe bindings for OSX and iOS. 
 
 ### Features ###
