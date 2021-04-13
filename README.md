@@ -1,10 +1,8 @@
 # Haxe GameCenterManager
 
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](https://github.com/Tw1ddle/haxe-gamecentermanager/blob/master/LICENSE)
+*Don't use this. These bindings are unfinished, and GameCenterManager was [rewritten](https://github.com/nihalahmed/GameCenterManager/tree/swift-refactor) in Swift. So this haxelib is out of date and deprecated.*
 
-*Deprecated - these bindings are unfinished, and GameCenterManager was [rewritten](https://github.com/nihalahmed/GameCenterManager/tree/swift-refactor) in Swift. So this haxelib is out of date and deprecated.*
-
-[GameCenterManager](https://github.com/nihalahmed/GameCenterManager) Haxe bindings for OSX and iOS. 
+[GameCenterManager](https://github.com/nihalahmed/GameCenterManager) Haxe bindings for Mac OSX and iOS. 
 
 ### Features
 
